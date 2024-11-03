@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/TvShowsPlatform.dir/src/main.cpp.o CMakeFiles/TvShowsPlatform.dir/src/TvShow.cpp.o -o TvShowsPlatform 

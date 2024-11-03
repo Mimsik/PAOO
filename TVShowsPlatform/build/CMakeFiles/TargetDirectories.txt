@@ -1,0 +1,3 @@
+/home/joarria/Documents/TVShowsPlatform/build/CMakeFiles/TvShowsPlatform.dir
+/home/joarria/Documents/TVShowsPlatform/build/CMakeFiles/edit_cache.dir
+/home/joarria/Documents/TVShowsPlatform/build/CMakeFiles/rebuild_cache.dir
