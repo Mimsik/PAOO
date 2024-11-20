@@ -11,6 +11,8 @@ TvShow::TvShow(const std::string& title, const std::string& genre, int episodes,
 
         // Copies the content of the `desc` variable into the memory pointed to by `description` pointer
         strcpy(description, desc);
+
+        std::cout << "TvShow: Object '" << title << "' was created." << std::endl;
     }
 
 // Copy-Constructor
@@ -20,12 +22,16 @@ TvShow::TvShow(const TvShow& other)
         // Allocates memory for the copy
         description = new char[strlen(other.description) + 1];
         strcpy(description, other.description);
+
+        std::cout << "TvShow: Copy constructor called for '" << other.title << "'." << std::endl;
     }
 
 // Destructor 
 TvShow::~TvShow() {
     // Free the memory
     delete[] description;
+
+    std::cout << "TvShow: Object '" << title << "' was destroyed." << std::endl;
 }
 
 // Assignment operator
@@ -42,6 +48,7 @@ TvShow& TvShow::operator=(const TvShow& other) {
         description = new char[strlen(other.description) + 1];
         strcpy(description, other.description);
     }
+     std::cout << "TvShow: Assignment operator used for '" << other.title << "'." << std::endl;
     return *this;
 }
 
