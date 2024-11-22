@@ -1,44 +1,63 @@
-#include "TvShow.h"
-#include <iostream>
+#include "LimitedSeries.h"
 #include <vector>
-#include <algorithm>
+#include <iostream>
 
-// Funcție pentru afișarea unui top 3
-void displayTop3(const std::vector<TvShow>& top3) {
-    std::cout << "Top 3 TV Shows:" << std::endl;
+// Function to display a top 3 list
+void displayLimitedTop3(const std::vector<LimitedSeries>& top3) {
+    std::cout << "\nTop 3 Limited Series:\n";
     for (size_t i = 0; i < top3.size(); ++i) {
-        std::cout << i + 1 << ". " << top3[i].getTitle() << " (" << top3[i].getGenre() 
-                  << ", " << top3[i].getEpisodes() << " episodes)" << std::endl;
+        std::cout << i + 1 << ". " << top3[i].getTitle() << " (" << top3[i].getGenre()
+                  << ", " << top3[i].getEpisodes() << " episodes, " << top3[i].getAvailableDays() << " days left)\n";
     }
     std::cout << std::endl;
 }
 
 int main() {
-    // Create 5 TvShow objects
-    TvShow series1("The Haunting of Bly Manor", "Horror", 9, "A chilling story of love and ghosts.");
-    TvShow series2("The Haunting of Hill House", "Horror", 10, "A family's haunting memories of their old home.");
-    TvShow series3("Stranger Things", "Sci-Fi", 34, "A group of kids face supernatural forces.");
-    TvShow series4("Arcane", "Animation", 9, "The origins of iconic League of Legends champions.");
-    TvShow series5("Outer Banks", "Adventure", 30, "A group of teens uncover a long-buried treasure.");
-    TvShow series6("Orange is the New Black", "Drama", 91, "The story of women navigating life in prison.");
+    // Create LimitedSeries objects
+    LimitedSeries limited1("Chernobyl", "Historical", 5, "The true story of a nuclear disaster.", 1, 10);
+    LimitedSeries limited2("Band of Brothers", "War", 10, "A story of camaraderie during WWII.", 1, 5);
+    LimitedSeries limited3("The Queen's Gambit", "Drama", 7, "A chess prodigy's journey.", 1, 8);
+    TvShow series1 = LimitedSeries(limited1);
 
-    // Create a top 3 using the copy constructor
-    std::vector<TvShow> top3;
-    top3.push_back(series1);  // Copy constructor is called
-    top3.push_back(series3);  // Copy constructor is called
-    top3.push_back(series5);  // Copy constructor is called
+    // Initial top 3 list
+    std::vector<LimitedSeries> top3;
+    top3.reserve(3);
+    top3.push_back(limited1);  // Copy constructor
+    top3.push_back(limited2);  // Copy constructor
+    top3.push_back(limited3);  // Copy constructor
+    displayLimitedTop3(top3);
 
-    // Display the top 3 TV Shows
-    displayTop3(top3);
+    // Decrease available days for each series
+    for (auto& series : top3) {
+        series.decreaseAvailableDays();
+    }
 
-    // Replace the top 3 using move constructor
-    std::vector<TvShow> newTop3;
-    newTop3.push_back(std::move(series4));  // Move constructor is called
-    newTop3.push_back(std::move(series2));  // Move constructor is called
-    newTop3.push_back(std::move(series3));  // Move constructor is called
+    // Move expired series to another vector
+    std::vector<LimitedSeries> expired;
+    for (auto it = top3.begin(); it != top3.end();) {
+        //std::cout << "Checking series: " << it->getTitle() << " - Days left: " << it->getAvailableDays() << "\n";
+        if (it->getAvailableDays() == 0) {
+            std::cout << "Series '" << it->getTitle() << "' has expired. Moving to expired vector.\n";
+            expired.push_back(std::move(*it));  // Move constructor
+            it = top3.erase(it);  // Remove from top3
+        } else {
+            ++it;
+        }
+    }
 
-    // Display the new top 3 TV Shows
-    displayTop3(newTop3);
+    // Display updated top 3 list
+    std::cout << "\nAfter expiration check:";
+    displayLimitedTop3(top3);
+
+    // Display expired series
+    std::cout << "\nExpired Limited Series:\n";
+    if (expired.size() != 0) {
+        for (const auto& series : expired) {
+            std::cout << "- " << series.getTitle() << "\n";
+        }
+        std::cout << "\n";
+    }
+    else std::cout << "\nCurrently empty - no expired series for now\n";
 
     return 0;
 }
