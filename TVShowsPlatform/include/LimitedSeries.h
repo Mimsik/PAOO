@@ -2,11 +2,13 @@
 #define LIMITEDSERIES_H
 
 #include "TvShow.h"
+#include <mutex>  // Pentru std::mutex
 
 class LimitedSeries : public TvShow {
 private:
     int seasons;
-    int availableDays;  // Number of days available
+    int availableDays;
+    mutable std::mutex daysMutex;  // Mutex for synchronization
 
 public:
     // Constructor
@@ -18,10 +20,8 @@ public:
     // Move Constructor
     LimitedSeries(LimitedSeries&& other) noexcept;
 
-    // Copy Assignment Operator
+    // Assignment Operators
     LimitedSeries& operator=(const LimitedSeries& other);
-
-    // Move Assignment Operator
     LimitedSeries& operator=(LimitedSeries&& other) noexcept;
 
     // Destructor
@@ -29,7 +29,7 @@ public:
 
     // Getter and days management
     int getAvailableDays() const;
-    void decreaseAvailableDays();  // Decreases days by 1
+    void decreaseAvailableDays();
 };
 
 #endif
